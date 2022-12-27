@@ -1,0 +1,15 @@
+node {   
+    stage('Clone repository') {
+        git credentialsId: 'git', url: 'https://github.com/EsmOnesan/flask-calculator'
+    }
+    
+    stage('Build image') {
+       dockerImage = docker.build("esmonesan/app:latest")
+    }
+    
+ stage('Push image') {
+        withDockerRegistry([ credentialsId: "esmonesan_hub", url: "" ]) {
+        dockerImage.push()
+        }
+    }    
+}
